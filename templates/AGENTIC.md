@@ -9,6 +9,7 @@ Keep secrets out of it (C10). If the project repo is public, this file is public
 * **Branches:** <feature branch pattern> → PR into <integration branch> → promoted to <release branch> by the human. Default branch: <name>.
 * **Versions:** <scheme, and what earns a version>.
 * **Context file (C12):** `.agentic-context/<role>.md`. Session snapshots go on <issue>.
+* **Archiving (C17):** workers idle longer than <threshold> are archived. Archive folder: `<gitignored path>`.
 
 ## Sessions and roles
 

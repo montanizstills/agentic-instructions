@@ -5,6 +5,7 @@ A working agreement for projects where a human works with Claude agent sessions.
 * `core/agreement.md`: rules for every project, with stable IDs (C1, C2, ...).
 * `templates/AGENTIC.md`: the project settings file. Each project copies it to its own repo and fills it in.
 * `templates/session-context.md`: the context file a session keeps so a new session can pick up (C12).
+* `templates/archive-summary.md`: the Archivist's summary of an archived worker (C17).
 * `CHANGELOG.md`: one entry per tag.
 
 No secrets, tokens, or project details belong in this repo.

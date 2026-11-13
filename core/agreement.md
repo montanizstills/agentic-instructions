@@ -128,3 +128,13 @@ Prefer the cheapest thing that works: no AI calls in polling loops, no subagents
 ## C16. Repos belong to roles
 
 A repo is owned by a role (for example `media`), not by a particular session; the project file lists them. Any session acting in that role may make git writes there. Other roles read freely and send changes to the owning role. To avoid collisions, only one session writes to a branch at a time; name the branch in the issue before you start.
+
+## C17. Archiving workers and the Archivist
+
+A lead with workers designates one standing worker as its **Archivist** (role `archivist`). It keeps the context of workers that have been archived, so their decisions and lessons outlive their sessions.
+
+* **When:** a worker idle longer than the project file's threshold is archived. Before archiving, the lead exports its transcript and checks that its open items are on their issues.
+* **Summary:** the lead sends the Archivist the export's path. The Archivist writes one summary per session using `templates/archive-summary.md`, to the project's local archive folder (gitignored, set in the project file), and keeps an index there. It does this for every export.
+* **Gaps:** open items or decisions missing from their issue go back to the lead as draft comments. Posting them follows C4 and C5.
+* **Raw transcripts:** the Archivist says, per export, whether its summary fully captures it. A raw transcript is deleted only after that yes, and only with the human's approval (C5).
+* **Redaction:** summaries follow C10. No credentials, and no personal or customer data outside the local archive folder.
