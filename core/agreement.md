@@ -133,6 +133,7 @@ Without asking: create branches, commit and push to feature branches, open draft
 The human is often on mobile. Answer first, keep it short, and end with one clear ask.
 
 * The human switches between projects and loses context. When the lead speaks after a worker's message, it says what changed, then a 1 to 3 line refresher of where things stand. The full list of what waits on the human comes only when asked.
+* In Jira and wiki text, write issue keys, PRs and comment references as clickable markdown links, for example `[KEY-123](https://<site>/browse/KEY-123)`, never a bare `KEY-123`. Bare keys posted through the markdown API don't render as links on mobile.
 
 ## C15. Keep costs low
 
