@@ -37,11 +37,11 @@ Every session writes to Jira under its own C3 tag, without asking each time: com
 
 The human gives it in the lead's chat. Label the issue `human-review`.
 
-**Merge approvals in Jira.** The human may also approve a merge in their own Jira comment. It counts only if:
+**Merge approvals in Jira or on the PR.** The human may also ask for or approve a merge in their own Jira comment or PR comment, and the lead or an agent may then merge that PR. The comment counts only if:
 
 * the comment is untagged (no C3 tag, allowing for Jira's escaped `\[`);
 * its author is the human's account listed in the project file, checked through the API's author field, never trusted from the comment's text;
-* it names the specific PR (repo and number, for example "merge AutoJIRA#5"), and is on that PR's issue or the project's approvals issue.
+* it names the specific PR (repo and number, for example "merge AutoJIRA#5"), and is on that PR, that PR's issue, or the project's approvals issue.
 
 One comment covers only the PRs it names, and only at the head SHA that was reviewed. If the head changes, ask again. Other items on this list still need chat approval, unless the project file widens Jira approvals to them.
 
