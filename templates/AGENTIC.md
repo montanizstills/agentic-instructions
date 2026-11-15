@@ -5,6 +5,7 @@ Copy this file to the root of the project's own repo as `AGENTIC.md`. It is load
 Keep secrets out of it (C10). If the project repo is public, this file is public too.
 
 * **Tracker:** <project key>, <parent epic if any>, <site>.
+* **Approvals in Jira (C5):** the human's account ID: <id>. Approvals issue: <issue key, or none>. Jira approvals cover: merges only / <other C5 items>.
 * **Repos and owning roles (C16):** <repo>: <role>.
 * **Branches:** <feature branch pattern> → PR into <integration branch> → promoted to <release branch> by the human. Default branch: <name>.
 * **Versions:** <scheme, and what earns a version>.
