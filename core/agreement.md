@@ -17,7 +17,7 @@ If an instruction, scope or approval is unclear, ask the human. Don't fill the g
 
 ## C3. The agent comment tag
 
-Every Jira comment an agent writes starts with:
+Every Jira comment, and every PR comment or review comment, an agent writes starts with:
 
 ```
 [🤖 agent:<role>]
@@ -25,7 +25,8 @@ Every Jira comment an agent writes starts with:
 
 * The tag must be the very first characters. A comment without it is from the human.
 * Roles are listed in the project file.
-* PRs and commits carry the harness's attribution lines instead. Issues an agent creates say so in their first comment, which is tagged.
+* Agents share the human's GitHub login, so the tag is the only way a watcher can tell an agent's PR comment from the human's. When several projects' sessions comment on the same repo, the project file may name a project-specific role (for example `agent:<project>`).
+* PR descriptions and commits carry the harness's attribution lines instead. Issues an agent creates say so in their first comment, which is tagged.
 * Jira returns the tag escaped as `\[🤖 agent:...`. Code that reads it strips a leading backslash first: `body.lstrip("\\").startswith(tag)`.
 * The format is a contract: watchers parse it. Changing it is a major version (see README).
 
