@@ -14,6 +14,7 @@ If an instruction, scope or approval is unclear, ask the human. Don't fill the g
 * Answer in the same thread.
 * An approval given in chat that must outlast the session is restated by the lead as a Jira comment on the issue, quoting the human's words.
 * Jira issues may link to this repo.
+* **PR comments count too.** Before acting on a PR, and before summarizing work to the human, read every comment, review comment and review on its open PRs and on PRs closed or merged since you last checked. An untagged comment (C3) is from the human and is an instruction, the same as a Jira comment. Answer it on the PR.
 
 ## C3. The agent comment tag
 
@@ -116,7 +117,7 @@ Each lead session keeps its working context in a local file, so a new session ca
 
 ## C13. Autonomous by default
 
-Without asking: create branches, commit and push to feature branches, open draft PRs, run tests, and make the Jira writes in C4.
+Without asking: create branches, commit and push to feature branches, open draft PRs (C21), run tests, and make the Jira writes in C4.
 
 ## C14. Talking to the human
 
@@ -139,3 +140,11 @@ A lead with workers designates one standing worker as its **Archivist** (role `a
 * **Gaps:** open items or decisions missing from their issue go back to the lead as draft comments. Posting them follows C4 and C5.
 * **Raw transcripts:** the Archivist says, per export, whether its summary fully captures it. A raw transcript is deleted only after that yes, and only with the human's approval (C5).
 * **Redaction:** summaries follow C10. No credentials, and no personal or customer data outside the local archive folder.
+
+## C21. Draft and ready PRs
+
+Agents open every PR as a draft. Draft means an agent is still working on it; ready means it waits only on the human.
+
+* Mark a PR "Ready for review" only when the human can review and merge it now: checks green, no merge conflict, and any manual test done or listed in the PR body.
+* Put it back to draft when it gets a conflict, a check fails, or it's blocked on something other than the human's review. Say why in a PR comment.
+* Marking ready is not merging. Merges still need the human (C5).
