@@ -135,7 +135,7 @@ A repo is owned by a role (for example `media`), not by a particular session; th
 
 A lead with workers designates one standing worker as its **Archivist** (role `archivist`). It keeps the context of workers that have been archived, so their decisions and lessons outlive their sessions.
 
-* **When:** a worker idle longer than the project file's threshold is archived. Before archiving, the lead exports its transcript and checks that its open items are on their issues.
+* **When:** a worker idle for 90 minutes is archived, with no exceptions. Workers that are working stay visible, and archiving early loses nothing because the Archivist keeps each transcript's context. Before archiving, the lead exports its transcript and checks that its open items are on their issues.
 * **Summary:** the lead sends the Archivist the export's path. The Archivist writes one summary per session using `templates/archive-summary.md`, to the project's local archive folder (gitignored, set in the project file), and keeps an index there. It does this for every export.
 * **Gaps:** open items or decisions missing from their issue go back to the lead as draft comments. Posting them follows C4 and C5.
 * **Raw transcripts:** the Archivist says, per export, whether its summary fully captures it. A raw transcript is deleted only after that yes, and only with the human's approval (C5).
