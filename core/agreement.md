@@ -13,6 +13,7 @@ If an instruction, scope or approval is unclear, ask the human. Don't fill the g
 * Before starting or moving an issue, read all its comments. The human's comments are instructions and override the description.
 * Answer in the same thread.
 * An approval given in chat that must outlast the session is restated by the lead as a Jira comment on the issue, quoting the human's words.
+* Post a decision to its issue in the same turn it is made. Don't save it for a handoff.
 * Jira issues may link to this repo.
 * **PR comments count too.** Before acting on a PR, and before summarizing work to the human, read every comment, review comment and review on its open PRs and on PRs closed or merged since you last checked. An untagged comment (C3) is from the human and is an instruction, the same as a Jira comment. Answer it on the PR.
 
@@ -105,7 +106,7 @@ Before starting a task that changes something other people or agents depend on (
 
 ## C12. Context file
 
-Each lead session keeps its working context in a local file, so a new session can pick up where it left off.
+Each lead session keeps its working context in a local file, so a new session can pick up where it left off. A worker writes one when it hands off.
 
 * **Where:** `<repo>/.agentic-context/<role>.md`. Each project adds `.agentic-context/` to `.gitignore` before the first file is written. Never commit it: the repos are public and it changes every turn.
 * **Template:** `templates/session-context.md`.
@@ -113,6 +114,14 @@ Each lead session keeps its working context in a local file, so a new session ca
 * **Reading it:** a new session reads it first, then checks it against Jira and git before acting. Jira and git win if they disagree.
 * **Approvals:** the file lists them with links to the human's Jira comment (C2). The link is the permission, not the file. If the only record is chat, re-confirm before acting (C6).
 * **Not in it:** secrets, and standing preferences (those go in Claude Code's memory or in this repo).
+* **Context budget:** every turn re-reads the whole conversation. A session checks its usage at the start of a task and about every 10 turns. When its context passes 300k tokens (lead) or 200k tokens (worker), or right after any auto-compaction, it starts no new work and hands off:
+  1. It writes its handoff file: in flight, waiting on the human, live workers with their session ids, next steps.
+  2. The lead starts the successor with that file as its brief: a lead successor at top level, a worker successor on the same branch.
+  3. The old session is archived (C17), following the lead handoff steps below for a lead.
+  4. It tells the human in one line.
+
+  The human may give a standing approval for these restarts. Without one, the session proposes the restart as a one-click card. If the plan's usage window is above 80%, a session only finishes or parks work; it starts nothing new.
+* **Lead handoff:** the new lead starts at top level, or detaches itself to top level before taking over. Before handing off, the old lead detaches every live worker, so their turn-end notices stop waking it. It renames itself "Retired Lead · <project> (<date>)" and is archived (C17). After that no one messages it; the handoff file is the only channel. Workers the new lead starts nest under it. (Waking a retired lead re-reads its whole context, and only the old lead can detach its workers.)
 * **Off this machine:** at a handoff or the end of the day, the lead posts a short "Session snapshot" comment on the project's session issue, with the In flight, Waiting on the human and Next steps sections only. Cloud sessions and other machines pick up from that.
 
 ## C13. Autonomous by default
@@ -123,6 +132,8 @@ Without asking: create branches, commit and push to feature branches, open draft
 
 The human is often on mobile. Answer first, keep it short, and end with one clear ask.
 
+* The human switches between projects and loses context. When the lead speaks after a worker's message, it says what changed, then a 1 to 3 line refresher of where things stand. The full list of what waits on the human comes only when asked.
+
 ## C15. Keep costs low
 
 Prefer the cheapest thing that works: no AI calls in polling loops, no subagents or peer consultations unless the task needs them, and no paid calls without C5 approval.
@@ -131,16 +142,14 @@ Prefer the cheapest thing that works: no AI calls in polling loops, no subagents
 
 A repo is owned by a role (for example `media`), not by a particular session; the project file lists them. Any session acting in that role may make git writes there. Other roles read freely and send changes to the owning role. To avoid collisions, only one session writes to a branch at a time; name the branch in the issue before you start.
 
-## C17. Archiving workers and the Archivist
+## C17. Archiving sessions
 
-A lead with workers designates one standing worker as its **Archivist** (role `archivist`). It keeps the context of workers that have been archived, so their decisions and lessons outlive their sessions.
+Decisions live on the board (C2), so old sessions aren't kept as a record.
 
-* **When:** a worker idle longer than the project file's threshold is archived. Before archiving, the lead exports its transcript and checks that its open items are on their issues.
-* **Summary:** the lead sends the Archivist the export's path. The Archivist writes one summary per session using `templates/archive-summary.md`, to the project's local archive folder (gitignored, set in the project file), and keeps an index there. It does this for every export.
-* **Gaps:** open items or decisions missing from their issue go back to the lead as draft comments. Posting them follows C4 and C5.
-* **Raw transcripts:** the Archivist says, per export, whether its summary fully captures it. A raw transcript is deleted only after that yes, and only with the human's approval (C5).
-* **Redaction:** summaries follow C10. No credentials, and no personal or customer data outside the local archive folder.
-
+* **Idle workers:** a worker idle for 90 minutes is archived, with no exceptions. Workers that are working stay visible.
+* **Before archiving:** the outgoing session checks that every open item is on its issue. Items waiting on the human also go in the handoff file (C12).
+* **Deleting:** archived sessions are deleted only with the human's approval (C5).
+* **Finding a lost decision:** the lead may start a one-off subagent on a cheap model (C22) to search archived transcripts.
 ## C21. Draft and ready PRs
 
 Agents open every PR as a draft. Draft means an agent is still working on it; ready means it waits only on the human.
@@ -148,3 +157,11 @@ Agents open every PR as a draft. Draft means an agent is still working on it; re
 * Mark a PR "Ready for review" only when the human can review and merge it now: checks green, no merge conflict, and any manual test done or listed in the PR body.
 * Put it back to draft when it gets a conflict, a check fails, or it's blocked on something other than the human's review. Say why in a PR comment.
 * Marking ready is not merging. Merges still need the human (C5).
+
+## C22. Model by task
+
+Use the cheapest model that does the job well (C15).
+
+* When the lead starts a worker for mechanical work (lookups, filling CSVs or forms, running tests, rebases, archiving), it starts it on a cheaper model: a mid-tier model, or the smallest one for trivial jobs. The top model is for design, new code and hard debugging.
+* Workers send one message when they finish or are blocked. No acknowledgments or progress chatter.
+* For reading web pages, prefer fetching text over screenshots.
