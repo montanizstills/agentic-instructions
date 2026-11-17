@@ -1,6 +1,6 @@
 # Session context: <role> · <project>
 
-Path: `<project repo>/.agentic-context/<role>.md`, gitignored. Updated: <date time>, by <session name>. Agreement version: <tag>.
+Path: `~/.claude/agentic-context/<repo>/<role>.md`, outside the repo. Updated: <date time>, by <session name>. Agreement version: <tag>.
 
 Last verified against Jira and git: <date time>. Re-verify anything older than the last session before acting on it.
 

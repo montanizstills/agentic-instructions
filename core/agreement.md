@@ -1,8 +1,10 @@
 # Agentic working agreement (core)
 
-How the human and Claude agent sessions work together, in every project that loads this file. Each project keeps its own settings in an `AGENTIC.md` file in its own repo (see `templates/AGENTIC.md`); this repo holds nothing project-specific. A project file may add or tighten rules. To loosen a rule, it names the rule ID and gives the human's reason.
+How the human and Claude agent sessions work together, in every project that reads this file. This repo holds rules and conventions only, never project names or settings. A project repo holds at most one pointer file, and each project's own settings live in its settings page (C23). The settings page may add or tighten rules. To loosen a rule, it names the rule ID and gives the human's reason.
 
-Rule IDs are stable. Cite them in PRs, comments and project files ("per C7").
+Where these rules say Jira, read the project's tracker (C23).
+
+Rule IDs are stable. Cite them in PRs, comments and settings pages ("per C7").
 
 ## C1. Ask, never assume
 
@@ -26,15 +28,15 @@ Every Jira comment, and every PR comment or review comment, an agent writes star
 ```
 
 * The tag must be the very first characters. A comment without it is from the human.
-* Roles are listed in the project file.
-* Agents share the human's GitHub login, so the tag is the only way a watcher can tell an agent's PR comment from the human's. When several projects' sessions comment on the same repo, the project file may name a project-specific role (for example `agent:<project>`).
+* Roles are the standard ones in C23, plus any the settings page adds.
+* Agents share the human's GitHub login, so the tag is the only way a watcher can tell an agent's PR comment from the human's. When several projects' sessions comment on the same repo, the settings page may name a project-specific role (for example `agent:<project>`).
 * PR descriptions and commits carry the harness's attribution lines instead. Issues an agent creates say so in their first comment, which is tagged.
 * Jira returns the tag escaped as `\[🤖 agent:...`. Code that reads it strips a leading backslash first: `body.lstrip("\\").startswith(tag)`.
 * The format is a contract: watchers parse it. Changing it is a major version (see README).
 
 ## C4. Who writes to Jira
 
-Every session writes to Jira under its own C3 tag, without asking each time: comments, subtasks, and moving or closing its own issues (C7, C8). C5 items still need the human's approval. Code the project itself runs against Jira (for example a tool that creates issues from a plan) follows the project file.
+Every session writes to Jira under its own C3 tag, without asking each time: comments, subtasks, and moving or closing its own issues (C7, C8). C5 items still need the human's approval. Code the project itself runs against Jira (for example a tool that creates issues from a plan) follows the settings page.
 
 ## C5. Needs explicit human approval
 
@@ -47,9 +49,9 @@ The human gives it in a comment on the issue or in the lead's chat. Label the is
 * Rewriting shared history: force-pushes, rebasing a pushed branch, renaming or changing the default branch.
 * Changing repo or project settings: visibility, branch rules, Jira workflows, versions or boards.
 * Hosted environments: deploys to a public URL, DNS, firewall and ports, migrations on hosted data.
-* Bumping pinned or major dependencies, including adding this repo as a submodule or moving its pin.
+* Bumping pinned or major dependencies, including moving the agreement version a pointer file names.
 * Anything public or outward-facing: publishing, emailing real people.
-* Any issue labeled `human-review`, and anything the project file adds.
+* Any issue labeled `human-review`, and anything the settings page adds.
 
 ## C6. Approval scope
 
@@ -108,7 +110,7 @@ Before starting a task that changes something other people or agents depend on (
 
 Each lead session keeps its working context in a local file, so a new session can pick up where it left off. A worker writes one when it hands off.
 
-* **Where:** `<repo>/.agentic-context/<role>.md`. Each project adds `.agentic-context/` to `.gitignore` before the first file is written. Never commit it: the repos are public and it changes every turn.
+* **Where:** `~/.claude/agentic-context/<repo>/<role>.md`, outside the repo, so the repo needs no ignore entry. Never commit it: repos are public and it changes every turn.
 * **Template:** `templates/session-context.md`.
 * **When:** after a decision or approval, before ending a turn with work still open, before a handoff, and when the conversation is getting long.
 * **Reading it:** a new session reads it first, then checks it against Jira and git before acting. Jira and git win if they disagree.
@@ -122,7 +124,7 @@ Each lead session keeps its working context in a local file, so a new session ca
 
   The human may give a standing approval for these restarts. Without one, the session proposes the restart as a one-click card. If the plan's usage window is above 80%, a session only finishes or parks work; it starts nothing new.
 * **Lead handoff:** the new lead starts at top level, or detaches itself to top level before taking over. Before handing off, the old lead detaches every live worker, so their turn-end notices stop waking it. It renames itself "Retired Lead · <project> (<date>)" and is archived (C17). After that no one messages it; the handoff file is the only channel. Workers the new lead starts nest under it. (Waking a retired lead re-reads its whole context, and only the old lead can detach its workers.)
-* **Off this machine:** at a handoff or the end of the day, the lead posts a short "Session snapshot" comment on the project's session issue, with the In flight, Waiting on the human and Next steps sections only. Cloud sessions and other machines pick up from that.
+* **Off this machine:** at a handoff or the end of the day, the lead updates the "Session snapshot" section of the settings page (C23), with the In flight, Waiting on the human and Next steps sections only. Cloud sessions and other machines pick up from that.
 
 ## C13. Autonomous by default
 
@@ -140,7 +142,7 @@ Prefer the cheapest thing that works: no AI calls in polling loops, no subagents
 
 ## C16. Repos belong to roles
 
-A repo is owned by a role (for example `media`), not by a particular session; the project file lists them. Any session acting in that role may make git writes there. Other roles read freely and send changes to the owning role. To avoid collisions, only one session writes to a branch at a time; name the branch in the issue before you start.
+A repo is owned by a role (for example `media`), not by a particular session; the settings page lists any that aren't the default (C23). Any session acting in that role may make git writes there. Other roles read freely and send changes to the owning role. To avoid collisions, only one session writes to a branch at a time; name the branch in the issue before you start.
 
 ## C17. Archiving sessions
 
@@ -165,3 +167,17 @@ Use the cheapest model that does the job well (C15).
 * When the lead starts a worker for mechanical work (lookups, filling CSVs or forms, running tests, rebases, archiving), it starts it on a cheaper model: a mid-tier model, or the smallest one for trivial jobs. The top model is for design, new code and hard debugging.
 * Workers send one message when they finish or are blocked. No acknowledgments or progress chatter.
 * For reading web pages, prefer fetching text over screenshots.
+
+## C23. Settings: discovered first, then the settings page
+
+Sessions work out a project's settings in this order, and store each fact in only one place.
+
+* **Pointer file.** A project repo holds at most one agent file, `CLAUDE.md`, copied from `templates/CLAUDE.md`. It only says to read this agreement at a pinned tag, then the settings page. Nothing else agent-related goes in the repo.
+* **Discovered, not stored.** Anything a session can look up, it looks up at session start:
+  * **Tracker:** the repo's GitHub issues.
+  * **Board:** the GitHub Project linked to the repo. Field and option ids come from `gh project field-list`, never from a file.
+  * **Branches:** `<area>/<feature>` cut from `dev`, PR into `dev`, then `dev` into `prod` by the human. The repo's default branch is read from GitHub.
+  * **Roles:** `lead` and workers named for their job: `researcher`, `prototyper`, `planner`, `builder`, `reviewer`, `verifier`, `qa`, `steward`.
+* **Settings page.** The README of that GitHub Project (the board's own README, not the repo's `README.md`). It holds only what can't be discovered: rules tighter than core, waivers with the human's reason, project rules (for example "release 1 before cloud" or "tenant data never goes in git"), any role or repo owner that isn't the default, a tracker other than GitHub issues, and the C12 session snapshot. It follows C10: no secrets, personal or customer data, even when the board is private.
+* **Human's preferences.** Personal preferences stay in Claude Code's memory, not here or on the settings page.
+* **Missing or unreadable.** If a session can't read the agreement or the settings page, it stops and tells the human.

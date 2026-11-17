@@ -3,35 +3,16 @@
 A working agreement for projects where a human works with Claude agent sessions. Add it to any project; it holds nothing project-specific.
 
 * `core/agreement.md`: rules for every project, with stable IDs (C1, C2, ...).
-* `templates/AGENTIC.md`: the project settings file. Each project copies it to its own repo and fills it in.
+* `templates/CLAUDE.md`: the one pointer file a project repo holds (C23).
 * `templates/session-context.md`: the context file a session keeps so a new session can pick up (C12).
 * `CHANGELOG.md`: one entry per tag.
 
-No secrets, tokens, or project details belong in this repo.
+No secrets, tokens, project names or project settings belong in this repo. Project settings live on each project's settings page (C23).
 
 ## Using it in a project
 
-Adding the submodule is a C5 approval item. Add it pinned to a tag:
-
-```bash
-git submodule add https://github.com/montanizstills/agentic-instructions .agentic
-git -C .agentic checkout v1.0.0
-cp .agentic/templates/AGENTIC.md AGENTIC.md   # then fill it in
-echo ".agentic-context/" >> .gitignore
-git add .gitmodules .agentic AGENTIC.md .gitignore
-git commit
-```
-
-Then the project's `CLAUDE.md` starts with:
-
-```
-@.agentic/core/agreement.md
-@AGENTIC.md
-```
-
-followed by anything that only matters to that session, including: "If `.agentic/` is empty, stop and tell the human."
-
-Fresh clones need `git clone --recurse-submodules`, or `git submodule update --init` after cloning.
+1. Copy `templates/CLAUDE.md` to the project repo's root as `CLAUDE.md`, and fill in the tag and owner. Pointing at a new version is a C5 approval item.
+2. Link a GitHub Project to the repo. Put anything that can't be discovered (C23) in the Project's README.
 
 ## Changing it
 
@@ -48,16 +29,10 @@ Versions follow semver:
 ## Rolling out a version
 
 1. **Major only:** post a "Breaking change heads-up" (C9) on one issue in each consuming project, before tagging. Each project's lead acknowledges it.
-2. Each project bumps its pin in its own PR, approved by the human (C5):
-   ```bash
-   git -C .agentic fetch --tags
-   git -C .agentic checkout v1.1.0
-   git add .agentic
-   git commit
-   ```
+2. Each project moves the tag in its `CLAUDE.md` in its own PR, approved by the human (C5).
 3. After the merge, restart the project's sessions, subagents and teammates. Running sessions don't reload `CLAUDE.md`. Each lead updates its context file first (C12), so the new session picks up where it left off.
 
 ## Before tagging v1.0.0
 
-* [ ] Claude Code resolves `@.agentic/...` imports from a project's `CLAUDE.md` when the files live in a submodule.
-* [ ] Cloud and remote sessions clone with submodules. If not, the "`.agentic/` is empty" line in `CLAUDE.md` covers it.
+* [ ] Sessions, cloud ones included, can fetch the agreement from the pointer's raw URL at session start.
+* [ ] Sessions can read a GitHub Project's README with `gh` (needs the `project` scope).
