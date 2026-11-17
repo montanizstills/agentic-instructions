@@ -3,6 +3,7 @@
 A working agreement for projects where a human works with Claude agent sessions. Add it to any project; it holds nothing project-specific.
 
 * `core/agreement.md`: rules for every project, with stable IDs (C1, C2, ...).
+* `playbook.md`: step-by-step procedures for the rules. Not imported; agents read a section when they need it.
 * `templates/CLAUDE.md`: the one pointer file a project repo holds (C23).
 * `templates/session-context.md`: the context file a session keeps so a new session can pick up (C12).
 * `CHANGELOG.md`: one entry per tag.

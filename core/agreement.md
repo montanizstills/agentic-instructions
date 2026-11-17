@@ -4,6 +4,8 @@ How the human and Claude agent sessions work together, in every project that rea
 
 Where these rules say Jira, read the project's tracker (C23).
 
+Step-by-step procedures are in `playbook.md` in this repo. It isn't loaded with these rules: read the section you need when you need it.
+
 Rule IDs are stable. Cite them in PRs, comments and settings pages ("per C7").
 
 ## C1. Ask, never assume
