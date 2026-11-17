@@ -1,6 +1,6 @@
 # Agentic working agreement (core)
 
-How the human and Claude agent sessions work together, in every project that reads this file. This repo holds rules and conventions only, never project names or settings. A project repo holds at most one pointer file, and each project's own settings live in its settings page (C23). The settings page may add or tighten rules. To loosen a rule, it names the rule ID and gives the human's reason.
+How the human and Claude agent sessions work together, in every project that reads this file. This repo holds rules and conventions only, never project names or settings. A project repo holds only this agreement as a submodule and one `CLAUDE.md` that imports it, and each project's own settings live in its settings page (C23). The settings page may add or tighten rules. To loosen a rule, it names the rule ID and gives the human's reason.
 
 Where these rules say Jira, read the project's tracker (C23).
 
@@ -49,7 +49,7 @@ The human gives it in a comment on the issue or in the lead's chat. Label the is
 * Rewriting shared history: force-pushes, rebasing a pushed branch, renaming or changing the default branch.
 * Changing repo or project settings: visibility, branch rules, Jira workflows, versions or boards.
 * Hosted environments: deploys to a public URL, DNS, firewall and ports, migrations on hosted data.
-* Bumping pinned or major dependencies, including moving the agreement version a pointer file names.
+* Bumping pinned or major dependencies, including adding this repo as a submodule or moving its pin.
 * Anything public or outward-facing: publishing, emailing real people.
 * Any issue labeled `human-review`, and anything the settings page adds.
 
@@ -173,7 +173,7 @@ Use the cheapest model that does the job well (C15).
 
 Sessions work out a project's settings in this order, and store each fact in only one place.
 
-* **Pointer file.** A project repo holds at most one agent file, `CLAUDE.md`, copied from `templates/CLAUDE.md`. It only says to read this agreement at a pinned tag, then the settings page. Nothing else agent-related goes in the repo.
+* **In the repo.** Only two agent things: this repo as a submodule at `.agentic/`, pinned to a tag, and a `CLAUDE.md` copied from `templates/CLAUDE.md` that imports it. Claude Code loads imports at session start and reloads them after compaction, so the rules are always in context and match the pinned version. Nothing else agent-related goes in the repo.
 * **Discovered, not stored.** Anything a session can look up, it looks up at session start:
   * **Tracker:** the repo's GitHub issues.
   * **Board:** the GitHub Project linked to the repo. Field and option ids come from `gh project field-list`, never from a file.

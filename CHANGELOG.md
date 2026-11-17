@@ -7,4 +7,5 @@
 * C12 adds a context budget for leads and workers, and lead handoff steps.
 * C14: after a worker's message, the lead says what changed plus a short refresher.
 * C17 archives idle workers after 90 minutes. No Archivist or archive summaries.
-* Templates: pointer file (`CLAUDE.md`, C23) and session context file (C12).
+* Projects load the agreement as a submodule imported from `CLAUDE.md` (C23).
+* Templates: project `CLAUDE.md` (C23) and session context file (C12).
