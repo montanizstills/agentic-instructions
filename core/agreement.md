@@ -113,6 +113,7 @@ Each lead session keeps its working context in a local file, so a new session ca
 * **Reading it:** a new session reads it first, then checks it against Jira and git before acting. Jira and git win if they disagree.
 * **Approvals:** the file lists them with links to the human's Jira comment (C2). The link is the permission, not the file. If the only record is chat, re-confirm before acting (C6).
 * **Not in it:** secrets, and standing preferences (those go in Claude Code's memory or in this repo).
+* **Context budget:** every lead turn re-reads the whole conversation. When the lead's context passes about half its window, or the human asks, the lead writes this file (in flight, waiting on the human, live workers with their session ids, next steps) and starts a fresh lead session that reads only this file and the agreement. The fresh lead tells the live workers to report to it, and the old one stops.
 * **Off this machine:** at a handoff or the end of the day, the lead posts a short "Session snapshot" comment on the project's session issue, with the In flight, Waiting on the human and Next steps sections only. Cloud sessions and other machines pick up from that.
 
 ## C13. Autonomous by default
@@ -122,6 +123,8 @@ Without asking: create branches, commit and push to feature branches, open draft
 ## C14. Talking to the human
 
 The human is often on mobile. Answer first, keep it short, and end with one clear ask.
+
+* The human switches between projects and loses context. When the lead speaks after a worker's message, it says what changed, then a 1 to 3 line refresher of where things stand. The full list of what waits on the human comes only when asked.
 
 ## C15. Keep costs low
 
@@ -148,3 +151,11 @@ Agents open every PR as a draft. Draft means an agent is still working on it; re
 * Mark a PR "Ready for review" only when the human can review and merge it now: checks green, no merge conflict, and any manual test done or listed in the PR body.
 * Put it back to draft when it gets a conflict, a check fails, or it's blocked on something other than the human's review. Say why in a PR comment.
 * Marking ready is not merging. Merges still need the human (C5).
+
+## C22. Model by task
+
+Use the cheapest model that does the job well (C15).
+
+* When the lead starts a worker for mechanical work (lookups, filling CSVs or forms, running tests, rebases, archiving), it starts it on a cheaper model: a mid-tier model, or the smallest one for trivial jobs. The top model is for design, new code and hard debugging.
+* Workers send one message when they finish or are blocked. No acknowledgments or progress chatter.
+* For reading web pages, prefer fetching text over screenshots.
