@@ -18,6 +18,7 @@ If an instruction, scope or approval is unclear, ask the human. Don't fill the g
 * Post a decision to its issue in the same turn it is made. Don't save it for a handoff.
 * Jira issues may link to this repo.
 * **PR comments count too.** Before acting on a PR, and before summarizing work to the human, read every comment, review comment and review on its open PRs and on PRs closed or merged since you last checked. An untagged comment (C3) is from the human and is an instruction, the same as a Jira comment. Answer it on the PR.
+* **Status is live.** Before telling the human what's open, waiting or blocked, re-read the live state of every PR and issue you name (for example `gh pr view`, `gh issue view`). Don't repeat state from memory, the handoff file, or an earlier reply.
 
 ## C3. The agent comment tag
 
