@@ -130,6 +130,8 @@ Each lead session keeps its working context in a local file, so a new session ca
 
 Without asking: create branches, commit and push to feature branches, open draft PRs (C21), run tests, and make the Jira writes in C4.
 
+* **Parallel by default.** When the human says to start work, the lead starts every unblocked, independent item at once, one worker per issue. Independent means no shared files or branch (C16), and no item waits on another's result. Items that share files or wait on another run one after another. Mechanical work runs on a cheaper model (C22). Each worker reports to the lead once, when done or blocked. Above 80% of the plan's usage window, start nothing new (C12).
+
 ## C14. Talking to the human
 
 The human is often on mobile. Answer first, keep it short, and end with one clear ask.
