@@ -182,3 +182,14 @@ Sessions work out a project's settings in this order, and store each fact in onl
 * **Settings page.** The README of that GitHub Project (the board's own README, not the repo's `README.md`). It holds only what can't be discovered: rules tighter than core, waivers with the human's reason, project rules (for example "release 1 before cloud" or "tenant data never goes in git"), any role or repo owner that isn't the default, a tracker other than GitHub issues, and the C12 session snapshot. It follows C10: no secrets, personal or customer data, even when the board is private.
 * **Human's preferences.** Personal preferences stay in Claude Code's memory, not here or on the settings page.
 * **Missing or unreadable.** If a session can't read the agreement or the settings page, it stops and tells the human.
+
+## C24. A CI check for every story
+
+Every story adds at least one automated check that fails without its change, and that check runs in CI.
+
+* **Coverage in the PR.** The PR body lists each acceptance criterion next to the check that covers it. A criterion no check can cover (for example a visual review) is named as manual, with the reason.
+* **Ready means green.** A PR is ready for review (C21) only when those checks pass in CI. Screenshots and manual runs are extra evidence, never the gate, and the C7 proof links the CI run.
+* **Two tiers.** Quick checks (static checks, linters, unit tests, offline API tests: a few minutes, no secrets) and slow checks (a full stack, end-to-end tests) both run on every PR into `dev`, and both are required checks on `dev`. Changing which checks are required is a branch-protection change, so it needs the human (C5).
+* **No path filters on required checks.** A required check that's skipped stays pending, so required workflows run on every PR.
+* **Flaky tests.** Retries stay at 0, so a flaky test fails loudly. A reviewer may rerun a job once. A test that flakes twice gets a bug in the tracker.
+* **Where the check goes.** The project's settings page (C23) may name the minimum check per role or repo.
